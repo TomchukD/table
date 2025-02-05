@@ -1,0 +1,35 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  workflow_dispatch:  # Ручной запуск
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout репозиторий
+        uses: actions/checkout@v4
+
+      - name: Установка Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # Или нужная версия
+
+      - name: Установка зависимостей
+        run: npm install
+
+      - name: Сборка Angular
+        run: ng build --configuration=production --base-href "table"
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist/table  # Укажите название папки после сборки
+
